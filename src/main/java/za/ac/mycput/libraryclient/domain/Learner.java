@@ -4,71 +4,164 @@
    Date: 26 September 2022 */
 package za.ac.mycput.libraryclient.domain;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 
 public class Learner {
     
-    private String learnerId;
-    private String name;
-    private String surname;
-    private String grade;
-    private String gender;
+     static final String DATABASE_URL = "jdbc:derby://localhost:1527/DaleLibraryDB2022";
+     private  static final String Username = "Administrator";
+     private static final String Password = "Password" ;
+    
+    private String studentNumber;
+    private boolean canBorrow;
+    
 
     public Learner() {
     }
 
-    public Learner(String learnerId, String name, String surname, String grade, String gender) {
-        this.learnerId = learnerId;
-        this.name = name;
-        this.surname = surname;
-        this.grade = grade;
-        this.gender = gender;
+    public Learner(String studentNumber, boolean canBorrow) {
+        this.studentNumber = studentNumber;
+        this.canBorrow = canBorrow;
+        
     }
 
-    public String getLearnerId() {
-        return learnerId;
+    public String getStudentNumber() {
+        return studentNumber;
     }
 
-    public String getName() {
-        return name;
+    public boolean getCanBorrow() {
+        return canBorrow;
     }
 
-    public String getSruname() {
-        return surname;
+    
+
+    public void setStudentNumber(String studentNumber) {
+        this.studentNumber = studentNumber;
     }
 
-    public String getGrade() {
-        return grade;
+    public void setcanBorrow(boolean canBorrow) {
+        this.canBorrow = canBorrow;
     }
 
-    public String getGender() {
-        return gender;
-    }
-
-    public void setLearnerId(String learnerId) {
-        this.learnerId = learnerId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setSruname(String sruname) {
-        this.surname = sruname;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+   
 
     @Override
     public String toString() {
-        return "Learner{" + "learnerId=" + learnerId + ", name=" + name + ", sruname=" + surname + ", grade=" + grade + ", gender=" + gender + '}';
+        return "Learner{" + "studentNumber=" + studentNumber + ", canBorrow=" + canBorrow +  '}';
+        
+        
     }
     
     
+    public boolean save(){
+         Connection connection = null ; //manage connections
+                Statement statement = null ;    // query statement
+                int ok;
+                boolean success = true;
+              
+               try { 
+                   //establish connection to database
+                   connection = DriverManager.getConnection(DATABASE_URL , Username , Password);
+                   //creating statement for quering database
+                   statement = connection.createStatement();
+                   
+                   ok = statement.executeUpdate("INSERT INTO  Learner VALUES('" + studentNumber + "' , '" + canBorrow +  "')");
+                   if (ok > 0){
+                       JOptionPane.showMessageDialog(null , "Suscess! Learner is added");
+                       System.exit(0);
+               }
+                   else {
+                       JOptionPane.showMessageDialog(null , "Error: could not add learner");
+                       success = false;
+
+                   }
+                }
+               catch (SQLException sqlException){
+                   JOptionPane.showMessageDialog(null  , "Error: could not add learner" + sqlException);
+                   success = false;
+               }
+                 
+               catch (Exception exception){
+                   JOptionPane.showMessageDialog(null , "Error: could not add learner" + exception);
+                   success = false;
+               }
+               
+               finally{
+               try {
+               if (statement != null)
+                   statement.close();
+               }
+               catch(Exception exception){
+               JOptionPane.showMessageDialog(null , exception.getMessage(), "Warning" , JOptionPane.ERROR_MESSAGE);
+               success = false;
+               }
+               try {
+               if (connection != null)
+                   connection.close();
+               }
+               catch(Exception exception){
+               JOptionPane.showMessageDialog(null , exception.getMessage(), "Warning" , JOptionPane.ERROR_MESSAGE);
+               success = false;
+               }
+            }
+            return success;
+    }
+     public boolean isStudentNumberUnique(){
+    
+        Connection connection = null;
+        Statement  statement = null;
+        ResultSet resultSet = null;
+        boolean unique = false; 
+        
+         
+            try { 
+                   //establish connection to database
+                   connection = DriverManager.getConnection(DATABASE_URL , Username , Password);
+                   //creating statement for quering database
+                   statement = connection.createStatement();
+                   
+                   resultSet = statement.executeQuery("SELECT * FROM Learner WHERE studentNumber = '" + studentNumber + "'");
+                   if (!resultSet.next()){
+                       //JOptionPane.showMessageDialog(null , "Suscess! the subject is added");
+                       unique = true;
+               }
+            }
+              catch(SQLException sqlException){
+               JOptionPane.showMessageDialog(null ,  "Error" + sqlException);
+              }
+              
+            finally{
+                //Method 1
+               try {
+               if (resultSet != null)
+                   resultSet.close();
+               }
+               catch(Exception exception){
+               JOptionPane.showMessageDialog(null , exception.getMessage(), "Warning" , JOptionPane.ERROR_MESSAGE);
+               }
+                try {
+               if (statement != null)
+                   statement.close();
+               }
+               catch(Exception exception){
+               JOptionPane.showMessageDialog(null , exception.getMessage(), "Warning" , JOptionPane.ERROR_MESSAGE);
+               }
+               try {
+               if (connection != null)
+                   connection.close();
+               }
+               catch(Exception exception){
+               JOptionPane.showMessageDialog(null , exception.getMessage(), "Warning" , JOptionPane.ERROR_MESSAGE);
+               
+               }
+            }
+            return unique;
+    }
     
 }

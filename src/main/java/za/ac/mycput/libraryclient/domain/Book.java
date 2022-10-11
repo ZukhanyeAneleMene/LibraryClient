@@ -9,57 +9,27 @@ import java.io.Serializable;
 
 public class Book implements Serializable{
     
-    private String bookId;
+    
     private String isbn;
     private String title;
     private String edition;
     private String rating;
-    private String publishedDate;
-    private String publisherId;
+    private String auther;
+    private String fiction;
+    private String availableForLoan;
 
     public Book() {
     }
 
-    public Book(String bookId, String isbn, String title, String edition, String rating, String publishedDate, String publisherId) {
-        this.bookId = bookId;
+    public Book( String isbn, String title, String edition, String rating, String auther, String fiction, String availableForLoan) {
+        
         this.isbn = isbn;
         this.title = title;
         this.edition = edition;
         this.rating = rating;
-        this.publishedDate = publishedDate;
-        this.publisherId = publisherId;
-    }
-
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setEdition(String edition) {
-        this.edition = edition;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public void setPublishedDate(String publishedDate) {
-        this.publishedDate = publishedDate;
-    }
-
-    public void setPublisherId(String publisherId) {
-        this.publisherId = publisherId;
-    }
-
-    public String getBookId() {
-        return bookId;
+        this.auther = auther;
+        this.fiction = fiction;
+        this.availableForLoan = availableForLoan;
     }
 
     public String getIsbn() {
@@ -78,18 +48,52 @@ public class Book implements Serializable{
         return rating;
     }
 
-    public String getPublishedDate() {
-        return publishedDate;
+    public String getAuther() {
+        return auther;
     }
 
-    public String getPublisherId() {
-        return publisherId;
+    public String getFiction() {
+        return fiction;
+    }
+
+    public String getAvailableForLoan() {
+        return availableForLoan;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public void setAuther(String auther) {
+        this.auther = auther;
+    }
+
+    public void setFiction(String fiction) {
+        this.fiction = fiction;
+    }
+
+    public void setAvailableForLoan(String availableForLoan) {
+        this.availableForLoan = availableForLoan;
     }
 
     @Override
     public String toString() {
-        return "Book{" + "bookId=" + bookId + ", isbn=" + isbn + ", title=" + title + ", edition=" + edition + ", rating=" + rating + ", publishedDate=" + publishedDate + ", publisherId=" + publisherId + '}';
+        return "Book{" + "isbn=" + isbn + ", title=" + title + ", edition=" + edition + ", rating=" + rating + ", auther=" + auther + ", fiction=" + fiction + ", availableForLoan=" + availableForLoan + '}';
     }
+
+   
     
     
     
